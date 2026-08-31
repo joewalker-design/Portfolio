@@ -202,28 +202,6 @@ img{ max-width:100%; display:block; }
   }
 }
 
-/* Mobile Contact Button underneath logo / hero */
-.mobile-contact-btn {
-  display: none;
-  font-family: var(--font-mono);
-  font-size: 13px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--color-yellow);
-  background: transparent;
-  border: 1px solid var(--color-yellow);
-  padding: 12px 28px;
-  border-radius: var(--radius);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.mobile-contact-btn:hover,
-.mobile-contact-btn:active {
-  background: var(--color-yellow);
-  color: #211B14;
-}
-
 @media (max-width: 640px) {
   .welcome {
     justify-content: space-between;
@@ -237,9 +215,6 @@ img{ max-width:100%; display:block; }
     align-items: center;
     justify-content: center;
   }
-  .mobile-contact-btn {
-    display: inline-block;
-  }
 }
 
 /* ============================================================
@@ -250,7 +225,7 @@ img{ max-width:100%; display:block; }
 
 .section-head{
   display:flex;
-  justify-content:space-between;
+  justify-content:flex-start;
   align-items:center;
   gap:16px;
   margin-bottom:56px;
@@ -294,13 +269,66 @@ img{ max-width:100%; display:block; }
    ============================================================ */
 .about-content{
   display:flex;
-  flex-direction:column;
-  align-items:center;
+  flex-direction:row;
+  align-items:stretch;
+  justify-content:center;
+  gap:48px;
 }
 
 .about-text{
   width:100%;
   max-width:640px;
+  flex:1 1 480px;
+}
+
+.about-image{
+  position:relative;
+  flex:1 1 320px;
+  max-width:420px;
+  min-height:100%;
+  border-radius:0 0 var(--radius-lg) var(--radius-lg);
+  overflow:hidden;
+}
+.about-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.about-image-outline{
+  position:absolute;
+  inset:0;
+  z-index:2;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+}
+.about-image-outline-path{
+  fill:none;
+  stroke:var(--line);
+  stroke-width:1.5;
+  stroke-dasharray:3 3;
+  vector-effect:non-scaling-stroke;
+  animation:tileMarchingAnts 0.5s linear infinite;
+}
+@media (prefers-reduced-motion: reduce){
+  .about-image-outline-path{ animation:none; }
+}
+
+@media (max-width:900px){
+  .about-content{ flex-direction:column; align-items:center; }
+  .about-text{ max-width:640px; }
+  .about-image{
+    width:100%;
+    max-width:640px;
+    aspect-ratio:16/10;
+    min-height:0;
+  }
+}
+
+@media (max-width:640px){
+  .about-image{ display:none; }
 }
 
 .about-text p{
@@ -413,6 +441,21 @@ img{ max-width:100%; display:block; }
   overflow:hidden;
 }
 
+.tile-image-placeholder{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:16px;
+  background:rgba(255,255,255,0.03);
+  border:1px dashed rgba(255,255,255,0.16);
+  font-family:var(--font-mono);
+  font-size:12px;
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+  color:var(--text-mute);
+}
+
 .tile img{
   width:100%; height:100%;
   object-fit:cover;
@@ -491,9 +534,25 @@ img{ max-width:100%; display:block; }
 .more-projects-grid .tile-info{ min-height:99px; }
 
 .more-projects-wrap{
-  display:flex;
-  justify-content:flex-end;
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:14px;
   margin-top:20px;
+}
+
+.more-projects-col{
+  grid-column:span 2;
+  display:flex;
+  justify-content:center;
+}
+
+@media (max-width:760px){
+  .more-projects-wrap{ grid-template-columns:repeat(2, 1fr); }
+  .more-projects-col{ grid-column:span 1; }
+}
+@media (max-width:520px){
+  .more-projects-wrap{ grid-template-columns:1fr; gap:12px; }
+  .more-projects-col{ grid-column:span 1; }
 }
 
 .more-projects-btn{
@@ -512,6 +571,91 @@ img{ max-width:100%; display:block; }
 .more-projects-btn:hover{
   background:transparent;
   color:var(--accent);
+}
+
+/* ============================================================
+   INQUIRY FORM
+   ============================================================ */
+.inquiry-form{
+  max-width:720px;
+  display:flex;
+  flex-direction:column;
+  gap:22px;
+}
+
+.inquiry-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:22px;
+}
+
+.inquiry-field{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.inquiry-field label{
+  font-family:var(--font-mono);
+  font-size:12px;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--text-mute);
+}
+
+.inquiry-field input,
+.inquiry-field textarea{
+  font-family:var(--font-body);
+  font-size:15px;
+  color:var(--text);
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.14);
+  border-radius:var(--radius);
+  padding:13px 16px;
+  resize:vertical;
+  transition:border-color 0.2s ease, background 0.2s ease;
+}
+
+.inquiry-field input::placeholder,
+.inquiry-field textarea::placeholder{
+  color:var(--text-mute);
+}
+
+.inquiry-field input:focus-visible,
+.inquiry-field textarea:focus-visible{
+  outline:none;
+  border-color:var(--color-yellow);
+  background:rgba(255,255,255,0.05);
+}
+
+.inquiry-send-btn{
+  align-self:flex-start;
+  font-family:var(--font-mono);
+  font-size:13px;
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+  color:#211B14;
+  background:var(--color-yellow);
+  border:1px solid var(--color-yellow);
+  padding:14px 36px;
+  border-radius:var(--radius);
+  cursor:pointer;
+  transition:background 0.2s ease, color 0.2s ease;
+}
+.inquiry-send-btn:hover{
+  background:transparent;
+  color:var(--color-yellow);
+}
+
+.inquiry-note{
+  font-family:var(--font-mono);
+  font-size:12px;
+  color:var(--text-mute);
+}
+
+@media (max-width:640px){
+  .inquiry-row{ grid-template-columns:1fr; gap:22px; }
+  .inquiry-send-btn{ align-self:stretch; text-align:center; }
 }
 
 /* ============================================================
@@ -691,15 +835,18 @@ img{ max-width:100%; display:block; }
 
 .gallery-split{
   display:grid;
-  grid-template-columns:1.1fr 1fr;
+  grid-template-columns:1fr 1fr;
   gap:32px;
   align-items:start;
   padding:0 var(--modal-pad-x) 24px;
 }
 .gallery-split.hidden{ display:none; }
 
-.gallery-split-left{
+.gallery-split-text-cell{
   min-width:0;
+}
+.gallery-split-text-cell.span-column{
+  grid-row:span 12;
 }
 
 .gallery-split-text{
@@ -711,6 +858,7 @@ img{ max-width:100%; display:block; }
   margin:0 0 16px;
 }
 
+.gallery-split-text h4,
 .gallery-split-deliverables h4{
   font-family:var(--font-mono);
   font-size:13px;
@@ -719,6 +867,7 @@ img{ max-width:100%; display:block; }
   text-transform:uppercase;
   margin:24px 0 16px;
 }
+.gallery-split-text h4:first-child{ margin-top:0; }
 .deliverables-columns{
   display:grid;
   grid-template-columns:1fr;
@@ -738,12 +887,7 @@ img{ max-width:100%; display:block; }
   color:var(--text);
 }
 
-.gallery-split-images{
-  display:flex;
-  flex-direction:column;
-  gap:24px;
-}
-.gallery-split-images img{
+.gallery-split-img{
   width:100%;
   border-radius:var(--radius);
   display:block;
@@ -1007,6 +1151,9 @@ img{ max-width:100%; display:block; }
   gap:16px;
   padding:32px var(--modal-pad-x) 0;
 }
+.modal-pdf.tight-top{
+  padding-top:8px;
+}
 .modal-pdf.hidden{ display:none; }
 .modal-pdf-note{
   text-align:center;
@@ -1039,35 +1186,20 @@ img{ max-width:100%; display:block; }
 body.modal-locked{ overflow:hidden; }
 
 /* ============================================================
-   CONTACT MODAL
+   CONTACT INFO LIST
    ============================================================ */
-.cv-header{ margin-bottom:8px; }
-
-.contact-panel{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  padding:48px var(--modal-pad-x);
-}
-
-.contact-inner{
-  width:100%;
-  max-width:520px;
-}
-
 .contact-list{
   list-style:none;
   display:flex;
-  flex-direction:column;
-  gap:22px;
+  flex-direction:row;
+  flex-wrap:wrap;
+  gap:40px;
   margin-top:32px;
 }
 .contact-list li{
   display:flex;
   flex-direction:column;
   gap:4px;
-  padding-bottom:20px;
 }
 
 .contact-label{
@@ -1088,7 +1220,7 @@ body.modal-locked{ overflow:hidden; }
 .contact-list a:hover{ color:var(--color-yellow) !important; }
 
 @media (max-width:640px){
-  .contact-panel{ padding:36px 24px; }
+  .contact-list{ flex-direction:column; gap:22px; }
 }
 
 .modal-sketchfab-header{
@@ -1198,18 +1330,147 @@ body.modal-locked{ overflow:hidden; }
   .play-logo-btn{
     bottom:auto;
     top:20px;
-    right:20px;
+    left:20px;
+    right:auto;
     padding:10px 16px;
     font-size:11px;
   }
 }
 
 /* ============================================================
+   MOBILE HAMBURGER MENU
+   ============================================================ */
+.hamburger-btn{
+  display:none;
+  position:fixed;
+  top:20px;
+  right:20px;
+  z-index:150;
+  width:42px;
+  height:42px;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  background:rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.14);
+  border-radius:var(--radius);
+  cursor:pointer;
+}
+.hamburger-btn span{
+  display:block;
+  width:18px;
+  height:2px;
+  background:var(--text);
+  transition:transform 0.25s ease, opacity 0.25s ease;
+}
+.hamburger-btn.open span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+.hamburger-btn.open span:nth-child(2){ opacity:0; }
+.hamburger-btn.open span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+
+@media (max-width:640px){
+  .hamburger-btn{ display:flex; }
+}
+
+.mobile-menu-overlay{
+  position:fixed;
+  inset:0;
+  z-index:140;
+  background:rgba(10,10,12,0.6);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  opacity:0;
+  visibility:hidden;
+  transition:opacity 0.3s ease, visibility 0.3s ease;
+}
+.mobile-menu-overlay.open{
+  opacity:1;
+  visibility:visible;
+}
+
+.mobile-menu-panel{
+  position:absolute;
+  top:0; right:0;
+  width:min(78vw, 340px);
+  height:100%;
+  background-color:#111111;
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size:40px 40px;
+  border-left:1px solid rgba(255,255,255,0.1);
+  padding:28px 24px;
+  display:flex;
+  flex-direction:column;
+  transform:translateX(100%);
+  transition:transform 0.35s cubic-bezier(.2,.8,.2,1);
+}
+.mobile-menu-overlay.open .mobile-menu-panel{
+  transform:translateX(0);
+}
+
+.mobile-menu-close{
+  align-self:flex-end;
+  width:36px;
+  height:36px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(14,14,18,0.55);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:var(--radius);
+  color:var(--text);
+  font-size:16px;
+  cursor:pointer;
+  margin-bottom:32px;
+}
+
+.mobile-menu-links{
+  display:flex;
+  flex-direction:column;
+  gap:26px;
+}
+.mobile-menu-links a,
+.mobile-menu-links button{
+  font-family:var(--font-display);
+  font-weight:700;
+  font-size:22px;
+  text-align:left;
+  color:var(--text-dim);
+  background:none;
+  border:none;
+  cursor:pointer;
+}
+.mobile-menu-links a:hover,
+.mobile-menu-links button:hover{ color:var(--accent); }
+
+.mobile-menu-quick-info{
+  list-style:none;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  margin-top:auto;
+  padding-top:28px;
+  border-top:1px solid rgba(255,255,255,0.1);
+}
+.mobile-menu-quick-info li{
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+}
+.mobile-menu-quick-info a{
+  font-family:var(--font-body);
+  font-size:14px;
+  color:var(--text);
+  word-break:break-word;
+}
+.mobile-menu-quick-info a:hover{ color:var(--color-yellow); }
+
+/* ============================================================
    INTRO REVEAL — navbar / logo / title fade in after the intro
    ============================================================ */
 .navbar,
-.hero-group,
-.mobile-contact-btn{
+.hero-group{
   opacity:0;
   transform:translateY(12px);
   transition:opacity 0.9s ease, transform 0.9s ease;
@@ -1217,7 +1478,6 @@ body.modal-locked{ overflow:hidden; }
 
 html.intro-revealed .navbar,
 html.intro-revealed .hero-group,
-html.intro-revealed .mobile-contact-btn,
 html.intro-revealed .play-logo-btn{
   opacity:1;
   transform:none;
@@ -1245,9 +1505,47 @@ html.intro-revealed .play-logo-btn{
   <div class="navbar-links">
     <a href="#about" class="nav-about">About</a>
     <a href="#work" class="nav-work">Work</a>
-    <button type="button" id="contactButton" class="nav-contact">Contact</button>
+    <a href="#inquiry" class="nav-contact">Contact</a>
   </div>
 </nav>
+
+<!-- ============================================================
+     MOBILE HAMBURGER MENU
+     ============================================================ -->
+<button type="button" id="hamburgerBtn" class="hamburger-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenuPanel">
+  <span></span><span></span><span></span>
+</button>
+
+<div class="mobile-menu-overlay" id="mobileMenuOverlay">
+  <div class="mobile-menu-panel" id="mobileMenuPanel">
+    <button type="button" class="mobile-menu-close" id="mobileMenuClose" aria-label="Close menu">×</button>
+
+    <nav class="mobile-menu-links">
+      <a href="#about" id="mobileMenuAbout">About</a>
+      <a href="#work" id="mobileMenuWork">Work</a>
+      <a href="#inquiry" id="mobileMenuContactButton">Contact</a>
+    </nav>
+
+    <ul class="mobile-menu-quick-info">
+      <li>
+        <span class="contact-label">Email</span>
+        <a href="mailto:designer@jowa.uk">designer@jowa.uk</a>
+      </li>
+      <li>
+        <span class="contact-label">WhatsApp</span>
+        <a href="tel:+447888008625">+44 7888 008625</a>
+      </li>
+      <li>
+        <span class="contact-label">Instagram</span>
+        <a href="https://www.instagram.com/jowqui/" target="_blank" rel="noopener">@Jowqui</a>
+      </li>
+      <li>
+        <span class="contact-label">LinkedIn</span>
+        <a href="https://linkedin.com/in/joewalker-b5451a371" target="_blank" rel="noopener">linkedin.com/in/joewalker-b5451a371</a>
+      </li>
+    </ul>
+  </div>
+</div>
 
 <!-- ============================================================
      WELCOME
@@ -1272,9 +1570,6 @@ html.intro-revealed .play-logo-btn{
     <svg class="tile-outline" aria-hidden="true"><rect class="tile-outline-rect"></rect></svg>
     <span class="play-logo-btn-label">Play logo</span>
   </button>
-
-  <!-- Mobile Contact Button (Visible on <= 640px screens near page bottom) -->
-  <button type="button" id="mobileContactButton" class="mobile-contact-btn">Contact</button>
 </section>
 
 <!-- ============================================================
@@ -1302,6 +1597,9 @@ html.intro-revealed .play-logo-btn{
           <span><img src="./img/icons/nuke.png" alt="" class="about-tool-icon"> Nuke</span>
         </div>
       </div>
+      <div class="about-image">
+        <img src="./img/Profile PictureBW.png" alt="Joe Walker portrait">
+      </div>
     </div>
   </div>
 </section>
@@ -1318,6 +1616,54 @@ html.intro-revealed .play-logo-btn{
     <div id="workGridsWrap" class="grid-container">
 
     <div class="grid work-grid-panel" id="projectGrid">
+      <div class="tile"
+           data-role="Graphic Designer"
+           data-date="July 2026"
+           data-software="Illustrator, Photoshop"
+           data-desc="<h4>Objective</h4><p>Designed a logo for an auto repair business called Service Plus. The aim was to create a logo that evokes trust, reliability, and to stand out in a crowded market.</p><h4>Concept</h4><p>The client requested to have the &#8220;Service Plus&#8221; on separate lines, therefore, to evoke trust, filling in the gap with a solid blue block was chosen. The logo mark itself is a combination of &#8216;S&#8217; and &#8216;+&#8217;.</p><p>Several mock ups were included to show how the logo can be used in real world applications and touchpoints.</p>"
+           data-gallery="./img/Clients/serviceplus/logo with text.jpg, ./img/Clients/serviceplus/mockup.png, ./img/Clients/serviceplus/mockup2.png"
+           data-no-header-media="true"
+           data-gallery-split="true">
+        <svg class="tile-outline" aria-hidden="true"><rect class="tile-outline-rect"></rect></svg>
+        <div class="tile-image"><img src="./img/Clients/serviceplus/thumbnail.png" alt="Service Plus logo design thumbnail"></div>
+        <div class="tile-info">
+          <div class="tile-title">Service Plus</div>
+          <div class="tile-meta">
+            <span>Logo Design</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tile"
+           data-role="Graphic Designer"
+           data-date="July 2026"
+           data-software="Illustrator, InDesign, Photoshop"
+           data-desc="<p>Developed a complete brand identity and visual system for MINDSET, a non-clinical men's mental wellbeing charity operating across the UK. The initiative focused on transitioning the organization away from overly clinical, passive visual cues toward an action-oriented, community-focused brand that breaks stigma and encourages engagement through action and shared experience.</p>"
+           data-gallery="./img/Clients/mindset/LogoComparison.png, ./img/Clients/mindset/DesignsPage.png"
+           data-no-header-media="true"
+           data-gallery-split="true"
+           data-split-text-span="true"
+           data-deliverables="<h4>Key Deliverables</h4><div class=&quot;deliverables-columns&quot;><ul>
+             <li><strong>Logo &amp; Identity Redesign:</strong> Created a modern mark featuring a peak (symbolizing growth and personal challenge) wrapped in an encapsulating circle (representing community support). Selected a split wordmark using a bold, geometric sans-serif font (Anton) paired with a distinct color split (&quot;MIND&quot; and &quot;SET&quot;) to reflect both reflection and action.</li>
+             <li><strong>Brand Guidelines &amp; Assets:</strong> Established core typography standards using Anton for punchy headers and Inter for accessible body text. Defined web/app specifications for digital avatars, device icons, and favicons.</li>
+           </ul><ul>
+             <li><strong>Imagery &amp; Graphic System:</strong> Created guidelines for action-oriented, candid photography showcasing movement, outdoor settings, and authentic social connection. Built geometric graphic templates based on the brand mark for print and digital collateral.</li>
+             <li><strong>Applications &amp; Touchpoints:</strong> Designed real-world mockups including promotional print materials (business cards, recruitment flyers), digital social media templates (Instagram, X), and merchandise (caps, t-shirts, wristbands).</li>
+           </ul></div>"
+           data-pdf="./img/Clients/mindset/BP.pdf"
+           data-pdf-label="Brand Proposal PDF"
+           data-pdf-note="If you would like to see the full brand guidelines proposal, please see the PDF below.">
+        <svg class="tile-outline" aria-hidden="true"><rect class="tile-outline-rect"></rect></svg>
+        <div class="tile-image"><img src="./img/Clients/mindset/Thumbnail.png" alt="MINDSET charity branding thumbnail"></div>
+        <div class="tile-info">
+          <div class="tile-title">MINDSET Charity</div>
+          <div class="tile-meta">
+            <span>Branding</span>
+            <span>Graphic Design</span>
+          </div>
+        </div>
+      </div>
+
       <div class="tile"
            data-role="3D Environment Artist"
            data-date="January - June 2026"
@@ -1362,35 +1708,6 @@ html.intro-revealed .play-logo-btn{
       </div>
 
       <div class="tile"
-           data-role="Graphic Designer"
-           data-date="July 2026"
-           data-software="Illustrator, InDesign, Photoshop"
-           data-desc="Developed a complete brand identity and visual system for MINDSET, a non-clinical men's mental wellbeing charity operating across the UK. The initiative focused on transitioning the organization away from overly clinical, passive visual cues toward an action-oriented, community-focused brand that breaks stigma and encourages engagement through action and shared experience."
-           data-gallery="./img/Clients/mindset/LogoComparison.png, ./img/Clients/mindset/DesignsPage.png"
-           data-no-header-media="true"
-           data-gallery-split="true"
-           data-deliverables="<h4>Key Deliverables</h4><div class=&quot;deliverables-columns&quot;><ul>
-             <li><strong>Logo &amp; Identity Redesign:</strong> Created a modern mark featuring a peak (symbolizing growth and personal challenge) wrapped in an encapsulating circle (representing community support). Selected a split wordmark using a bold, geometric sans-serif font (Anton) paired with a distinct color split (&quot;MIND&quot; and &quot;SET&quot;) to reflect both reflection and action.</li>
-             <li><strong>Brand Guidelines &amp; Assets:</strong> Established core typography standards using Anton for punchy headers and Inter for accessible body text. Defined web/app specifications for digital avatars, device icons, and favicons.</li>
-           </ul><ul>
-             <li><strong>Imagery &amp; Graphic System:</strong> Created guidelines for action-oriented, candid photography showcasing movement, outdoor settings, and authentic social connection. Built geometric graphic templates based on the brand mark for print and digital collateral.</li>
-             <li><strong>Applications &amp; Touchpoints:</strong> Designed real-world mockups including promotional print materials (business cards, recruitment flyers), digital social media templates (Instagram, X), and merchandise (caps, t-shirts, wristbands).</li>
-           </ul></div>"
-           data-pdf="./img/Clients/mindset/BP.pdf"
-           data-pdf-label="Brand Proposal PDF"
-           data-pdf-note="If you would like to see the full brand guidelines proposal, please see the PDF below.">
-        <svg class="tile-outline" aria-hidden="true"><rect class="tile-outline-rect"></rect></svg>
-        <div class="tile-image"><img src="./img/Clients/mindset/Thumbnail.png" alt="MINDSET charity branding thumbnail"></div>
-        <div class="tile-info">
-          <div class="tile-title">MINDSET Charity</div>
-          <div class="tile-meta">
-            <span>Branding</span>
-            <span>Graphic Design</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="tile"
            data-role="3D & VFX Artist"
            data-date="February - March 2025"
            data-software="Maya, Nuke, After Effects"
@@ -1409,7 +1726,7 @@ html.intro-revealed .play-logo-btn{
         </div>
       </div>
 
-      <div class="tile"
+      <div class="tile hidden-extra"
            data-role="3D Environment Artist"
            data-date="January - March 2024"
            data-software="Unreal Engine 5, Maya, Substance Painter, Photoshop"
@@ -1500,14 +1817,88 @@ html.intro-revealed .play-logo-btn{
         </div>
       </div>
 
+      <div class="tile hidden-extra"
+           data-role="Graphic Designer"
+           data-desc="">
+        <svg class="tile-outline" aria-hidden="true"><rect class="tile-outline-rect"></rect></svg>
+        <div class="tile-image tile-image-placeholder" aria-hidden="true">Coming Soon - Under NDA</div>
+        <div class="tile-info">
+          <div class="tile-title">Sati</div>
+          <div class="tile-meta">
+            <span>Graphic Design</span>
+          </div>
+        </div>
+      </div>
+
 
     </div>
 
     <div class="more-projects-wrap">
-      <button type="button" class="more-projects-btn" id="moreProjectsBtn">More</button>
+      <div class="more-projects-col">
+        <button type="button" class="more-projects-btn" id="moreProjectsBtnGraphic">More Graphic Design</button>
+      </div>
+      <div class="more-projects-col">
+        <button type="button" class="more-projects-btn" id="moreProjectsBtn3D">More 3D Design</button>
+      </div>
     </div>
 
     </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     INQUIRY
+     ============================================================ -->
+<section class="section" id="inquiry" style="scroll-snap-align:start; scroll-snap-stop:always; min-height:100vh; display:flex; align-items:center;">
+  <div class="wrap" style="width:100%;">
+    <div class="section-head">
+      <h2><span class="title-dot dot-yellow"></span>Contact</h2>
+    </div>
+
+    <form class="inquiry-form" id="inquiryForm" novalidate>
+      <div class="inquiry-row">
+        <div class="inquiry-field">
+          <label for="inquiryName">Name</label>
+          <input type="text" id="inquiryName" name="name" autocomplete="name" required>
+        </div>
+        <div class="inquiry-field">
+          <label for="inquiryEmail">Email</label>
+          <input type="email" id="inquiryEmail" name="email" autocomplete="email" required>
+        </div>
+      </div>
+
+      <div class="inquiry-field">
+        <label for="inquirySubject">Subject</label>
+        <input type="text" id="inquirySubject" name="subject" required>
+      </div>
+
+      <div class="inquiry-field">
+        <label for="inquiryMessage">Project Details</label>
+        <textarea id="inquiryMessage" name="message" rows="6" required></textarea>
+      </div>
+
+      <button type="submit" class="inquiry-send-btn">Send</button>
+      <p class="inquiry-note">Opens your email app addressed to Designer@jowa.uk with your details filled in.</p>
+    </form>
+
+    <ul class="contact-list">
+      <li>
+        <span class="contact-label">Email</span>
+        <a href="mailto:designer@jowa.uk">designer@jowa.uk</a>
+      </li>
+      <li>
+        <span class="contact-label">WhatsApp</span>
+        <a href="tel:+447888008625">+44 7888 008625</a>
+      </li>
+      <li>
+        <span class="contact-label">LinkedIn</span>
+        <a href="https://linkedin.com/in/joewalker-b5451a371" target="_blank" rel="noopener">linkedin.com/in/joewalker-b5451a371</a>
+      </li>
+      <li>
+        <span class="contact-label">Instagram</span>
+        <a href="https://www.instagram.com/jowqui/" target="_blank" rel="noopener">@Jowqui</a>
+      </li>
+    </ul>
   </div>
 </section>
 
@@ -1556,11 +1947,10 @@ html.intro-revealed .play-logo-btn{
 
     <!-- Split layout: intro paragraph + bullet deliverables on the left, images stacked on the right -->
     <div class="gallery-split hidden" id="gallerySplit">
-      <div class="gallery-split-left">
+      <div class="gallery-split-text-cell" id="gallerySplitTextCell">
         <div class="gallery-split-text" id="gallerySplitText"></div>
         <div class="gallery-split-deliverables" id="gallerySplitDeliverables"></div>
       </div>
-      <div class="gallery-split-images" id="gallerySplitImages"></div>
     </div>
 
     <div class="gallery-grid hidden" id="galleryGrid"></div>
@@ -1609,42 +1999,6 @@ html.intro-revealed .play-logo-btn{
 </div>
 
 <!-- ============================================================
-     CONTACT MODAL
-     ============================================================ -->
-<div class="modal-overlay" id="contactModalOverlay">
-  <div class="modal-panel contact-panel">
-    <button class="modal-close" id="contactModalClose" aria-label="Close contact">×</button>
-
-    <div class="contact-inner">
-      <div class="cv-header">
-        <h2 class="modal-title"><span class="title-dot dot-yellow"></span>Contact</h2>
-      </div>
-
-      <ul class="contact-list">
-        <li>
-          <span class="contact-label">Email</span>
-          <a href="mailto:designer@jowa.uk">designer@jowa.uk</a>
-        </li>
-        <li>
-          <span class="contact-label">WhatsApp</span>
-          <a href="tel:+447888008625">+44 7888 008625</a>
-        </li>
-        <li>
-          <span class="contact-label">LinkedIn</span>
-          <a href="https://linkedin.com/in/joewalker-b5451a371" target="_blank" rel="noopener">linkedin.com/in/joewalker-b5451a371</a>
-        </li>
-        <li>
-          <span class="contact-label">Instagram</span>
-          <a href="https://www.instagram.com/jowqui/" target="_blank" rel="noopener">@Jowqui</a>
-        </li>
-
-      </ul>
-
-    </div>
-  </div>
-</div>
-
-<!-- ============================================================
      MORE PROJECTS MODAL
      ============================================================ -->
 <div class="modal-overlay" id="moreProjectsModalOverlay">
@@ -1652,7 +2006,7 @@ html.intro-revealed .play-logo-btn{
     <button class="modal-close" id="moreProjectsModalClose" aria-label="Close more projects">×</button>
 
     <div class="modal-body">
-      <div class="project-overview-heading">Additional Work</div>
+      <div class="project-overview-heading" id="moreProjectsHeading">Additional Work</div>
       <div class="grid more-projects-grid" id="moreProjectsGrid"></div>
     </div>
   </div>
@@ -1794,6 +2148,53 @@ html.intro-revealed .play-logo-btn{
     outlineResizeTimer = setTimeout(syncAllTileOutlines, 120);
   });
 
+  /* The traced outline's own canvas size (from the source SVG file) doesn't
+     necessarily match the profile photo's real pixel dimensions, so re-scale
+     the path against the image's actual naturalWidth/naturalHeight once it's
+     loaded, rather than trusting the SVG's declared viewBox. */
+  (function alignAboutImageOutline(){
+    const container = document.querySelector('.about-image');
+    const img  = container && container.querySelector('img');
+    const svg  = container && container.querySelector('.about-image-outline');
+    const path = svg && svg.querySelector('.about-image-outline-path');
+    if(!img || !svg || !path) return;
+
+    const ORIG_VB_W = 595.276;
+    const ORIG_VB_H = 690.692;
+    const OFFSET_X = 14;   // small "offset it a little" nudge, in the
+    const OFFSET_Y = -12;  // outline's original coordinate space
+
+    function applyAlignment(){
+      const nw = img.naturalWidth;
+      const nh = img.naturalHeight;
+      if(!nw || !nh) return;
+      svg.setAttribute('viewBox', '0 0 ' + nw + ' ' + nh);
+      const sx = nw / ORIG_VB_W;
+      const sy = nh / ORIG_VB_H;
+      path.setAttribute('transform', 'scale(' + sx + ',' + sy + ') translate(' + OFFSET_X + ',' + OFFSET_Y + ')');
+    }
+
+    if(img.complete && img.naturalWidth){
+      applyAlignment();
+    } else {
+      img.addEventListener('load', applyAlignment, { once:true });
+    }
+  })();
+
+  /* Give the About-image outline the same seamless dash wrap as the tiles */
+  (function syncAboutImageOutline(){
+    const path = document.querySelector('.about-image-outline-path');
+    if(!path || !path.getTotalLength) return;
+    const TARGET_SEGMENT = 6;
+    const perimeter = path.getTotalLength();
+    if(perimeter > 0){
+      const segments = Math.max(1, Math.round(perimeter / TARGET_SEGMENT));
+      const segmentLength = perimeter / segments;
+      const dash = segmentLength / 2;
+      path.style.strokeDasharray = dash + ' ' + dash;
+    }
+  })();
+
   /* ---------------------------------------------------------
      PROJECT MODAL & GALLERY LOGIC
      --------------------------------------------------------- */
@@ -1816,8 +2217,8 @@ html.intro-revealed .play-logo-btn{
   const galleryGrid     = document.getElementById('galleryGrid');
   const galleryGridTop  = document.getElementById('galleryGridTop');
   const gallerySplit       = document.getElementById('gallerySplit');
+  const gallerySplitTextCell = document.getElementById('gallerySplitTextCell');
   const gallerySplitText   = document.getElementById('gallerySplitText');
-  const gallerySplitImages = document.getElementById('gallerySplitImages');
   const gallerySplitDeliverables = document.getElementById('gallerySplitDeliverables');
   const modalBody          = document.getElementById('modalBody');
   const galleryGridLegacy = document.getElementById('galleryGridLegacy');
@@ -1899,12 +2300,13 @@ html.intro-revealed .play-logo-btn{
     if(isSplitLayout){
       modalDesc.innerHTML = '';
       modalDesc.classList.add('hidden');
-      modalBody.classList.add('split-body');
     } else {
       modalDesc.innerHTML = desc;
       modalDesc.classList.remove('hidden');
-      modalBody.classList.remove('split-body');
     }
+    // Modals without a full-width header image (MINDSET, Service Plus, etc.)
+    // sit right under the close button, so they use the smaller top padding.
+    modalBody.classList.toggle('split-body', noHeaderMedia);
 
     modalMeta.innerHTML = '';
     if (software.trim().length) {
@@ -1939,20 +2341,23 @@ html.intro-revealed .play-logo-btn{
     const remainingGridImages = isSplitLayout ? [] : gridImages;
 
     if(isSplitLayout && gridImages.length){
-      gallerySplitText.innerHTML = '<p>' + desc + '</p>';
+      gallerySplitText.innerHTML = desc;
       gallerySplitDeliverables.innerHTML = deliverablesHtml;
+      gallerySplitTextCell.classList.toggle('span-column', tile.getAttribute('data-split-text-span') === 'true');
 
-      gallerySplitImages.innerHTML = '';
+      gallerySplit.querySelectorAll('.gallery-split-img').forEach(el => el.remove());
       gridImages.forEach((src, i) => {
         const img = document.createElement('img');
+        img.className = 'gallery-split-img';
         img.src = src;
         img.alt = title + ' — image ' + (i + 1);
         img.loading = 'lazy';
-        gallerySplitImages.appendChild(img);
+        gallerySplit.appendChild(img);
       });
 
       gallerySplit.classList.remove('hidden');
     } else {
+      gallerySplit.querySelectorAll('.gallery-split-img').forEach(el => el.remove());
       gallerySplit.classList.add('hidden');
     }
 
@@ -2063,6 +2468,7 @@ html.intro-revealed .play-logo-btn{
       modalPdfLink.textContent = '↓ ' + (tile.getAttribute('data-pdf-label') || 'Project Evaluation PDF');
       modalPdfNote.textContent = tile.getAttribute('data-pdf-note') || '';
       modalPdf.classList.remove('hidden');
+      modalPdf.classList.toggle('tight-top', isSplitLayout);
     } else {
       modalPdfLink.removeAttribute('href');
       modalPdfNote.textContent = '';
@@ -2148,18 +2554,28 @@ html.intro-revealed .play-logo-btn{
   /* ---------------------------------------------------------
      MORE PROJECTS MODAL
      --------------------------------------------------------- */
-  const moreProjectsBtn          = document.getElementById('moreProjectsBtn');
+  const moreProjectsBtn3D        = document.getElementById('moreProjectsBtn3D');
+  const moreProjectsBtnGraphic   = document.getElementById('moreProjectsBtnGraphic');
   const moreProjectsOverlay      = document.getElementById('moreProjectsModalOverlay');
   const moreProjectsCloseBtn     = document.getElementById('moreProjectsModalClose');
   const moreProjectsGrid         = document.getElementById('moreProjectsGrid');
+  const moreProjectsHeading      = document.getElementById('moreProjectsHeading');
   let moreProjectsLastFocused    = null;
-  let moreProjectsPopulated      = false;
+  let moreProjectsPopulatedFor   = null;
 
-  function populateMoreProjectsGrid(){
-    if(moreProjectsPopulated) return;
+  // A tile counts as "Graphic Design" if its role mentions it; everything else is 3D Design.
+  function tileCategory(tile){
+    const role = (tile.dataset.role || '').toLowerCase();
+    return role.includes('graphic') ? 'graphic' : '3d';
+  }
+
+  function populateMoreProjectsGrid(category){
+    if(moreProjectsPopulatedFor === category) return;
+    moreProjectsGrid.innerHTML = '';
     let count = 0;
     tiles.forEach((tile, index) => {
       if(!tile.classList.contains('hidden-extra')) return;
+      if(tileCategory(tile) !== category) return;
       const card = tile.cloneNode(true);
       card.classList.remove('hidden-extra');
       card.dataset.tileIndex = index;
@@ -2173,12 +2589,13 @@ html.intro-revealed .play-logo-btn{
       placeholder.innerHTML = '<svg class="tile-outline" aria-hidden="true"><rect class="tile-outline-rect"></rect></svg><div class="tile-image"></div><div class="tile-info"></div>';
       moreProjectsGrid.appendChild(placeholder);
     }
-    moreProjectsPopulated = true;
+    moreProjectsPopulatedFor = category;
     syncAllTileOutlines();
   }
 
-  function openMoreProjectsModal(){
-    populateMoreProjectsGrid();
+  function openMoreProjectsModal(category){
+    populateMoreProjectsGrid(category);
+    moreProjectsHeading.textContent = category === 'graphic' ? 'Additional Graphic Design Work' : 'Additional 3D Design Work';
     moreProjectsLastFocused = document.activeElement;
     moreProjectsOverlay.classList.add('open');
     document.body.classList.add('modal-locked');
@@ -2190,7 +2607,8 @@ html.intro-revealed .play-logo-btn{
     if(moreProjectsLastFocused) moreProjectsLastFocused.focus();
   }
 
-  if(moreProjectsBtn) moreProjectsBtn.addEventListener('click', openMoreProjectsModal);
+  if(moreProjectsBtn3D) moreProjectsBtn3D.addEventListener('click', () => openMoreProjectsModal('3d'));
+  if(moreProjectsBtnGraphic) moreProjectsBtnGraphic.addEventListener('click', () => openMoreProjectsModal('graphic'));
   moreProjectsCloseBtn.addEventListener('click', closeMoreProjectsModal);
   moreProjectsOverlay.addEventListener('click', (e) => {
     if(e.target === moreProjectsOverlay) closeMoreProjectsModal();
@@ -2220,36 +2638,61 @@ html.intro-revealed .play-logo-btn{
   });
 
   /* ---------------------------------------------------------
-     CONTACT MODAL
+     MOBILE HAMBURGER MENU
      --------------------------------------------------------- */
-  const contactButton        = document.getElementById('contactButton');
-  const mobileContactButton  = document.getElementById('mobileContactButton');
-  const contactOverlay       = document.getElementById('contactModalOverlay');
-  const contactCloseBtn      = document.getElementById('contactModalClose');
-  let contactLastFocused     = null;
+  const hamburgerBtn        = document.getElementById('hamburgerBtn');
+  const mobileMenuOverlay   = document.getElementById('mobileMenuOverlay');
+  const mobileMenuCloseBtn  = document.getElementById('mobileMenuClose');
+  const mobileMenuLinks     = document.querySelectorAll('#mobileMenuAbout, #mobileMenuWork, #mobileMenuContactButton');
 
-  function openContactModal(){
-    contactLastFocused = document.activeElement;
-    contactOverlay.classList.add('open');
+  function openMobileMenu(){
+    mobileMenuOverlay.classList.add('open');
+    hamburgerBtn.classList.add('open');
+    hamburgerBtn.setAttribute('aria-expanded', 'true');
     document.body.classList.add('modal-locked');
-    contactCloseBtn.focus();
   }
-  function closeContactModal(){
-    contactOverlay.classList.remove('open');
+  function closeMobileMenu(){
+    mobileMenuOverlay.classList.remove('open');
+    hamburgerBtn.classList.remove('open');
+    hamburgerBtn.setAttribute('aria-expanded', 'false');
     document.body.classList.remove('modal-locked');
-    if(contactLastFocused) contactLastFocused.focus();
   }
 
-  if (contactButton) contactButton.addEventListener('click', openContactModal);
-  if (mobileContactButton) mobileContactButton.addEventListener('click', openContactModal);
-  contactCloseBtn.addEventListener('click', closeContactModal);
-  contactOverlay.addEventListener('click', (e) => {
-    if(e.target === contactOverlay) closeContactModal();
+  if(hamburgerBtn){
+    hamburgerBtn.addEventListener('click', () => {
+      if(mobileMenuOverlay.classList.contains('open')) closeMobileMenu();
+      else openMobileMenu();
+    });
+  }
+  if(mobileMenuCloseBtn) mobileMenuCloseBtn.addEventListener('click', closeMobileMenu);
+  mobileMenuOverlay.addEventListener('click', (e) => {
+    if(e.target === mobileMenuOverlay) closeMobileMenu();
   });
+  mobileMenuLinks.forEach(link => link.addEventListener('click', closeMobileMenu));
   document.addEventListener('keydown', (e) => {
-    if(!contactOverlay.classList.contains('open')) return;
-    if(e.key === 'Escape') closeContactModal();
+    if(!mobileMenuOverlay.classList.contains('open')) return;
+    if(e.key === 'Escape') closeMobileMenu();
   });
+
+  /* ---------------------------------------------------------
+     INQUIRY FORM — opens the visitor's email client, addressed
+     to Designer@jowa.uk, pre-filled with the form details.
+     --------------------------------------------------------- */
+  const inquiryForm = document.getElementById('inquiryForm');
+  if(inquiryForm){
+    inquiryForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name    = document.getElementById('inquiryName').value.trim();
+      const email   = document.getElementById('inquiryEmail').value.trim();
+      const subject = document.getElementById('inquirySubject').value.trim();
+      const message = document.getElementById('inquiryMessage').value.trim();
+
+      const mailSubject = subject || `Project inquiry from ${name}`;
+      const mailBody = `Name: ${name}\nEmail: ${email}\n\n${message}`;
+
+      window.location.href = `mailto:Designer@jowa.uk?subject=${encodeURIComponent(mailSubject)}&body=${encodeURIComponent(mailBody)}`;
+    });
+  }
 
   /* ---------------------------------------------------------
      INTRO VIDEO OVERLAY
@@ -2261,6 +2704,10 @@ html.intro-revealed .play-logo-btn{
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let dismissed = false;
+    // Bumped every time a new play attempt starts (initial autoplay or a
+    // Play Logo replay) so a stale, in-flight play()/pause() promise from
+    // an earlier attempt can never fade things out or block a newer one.
+    let playToken = 0;
 
     // Use the vertical clip on mobile-width viewports, matching the site's mobile breakpoint
     const isMobileViewport = window.matchMedia('(max-width:640px)').matches;
@@ -2290,6 +2737,27 @@ html.intro-revealed .play-logo-btn{
       setTimeout(revealContent, 1000);
     }
 
+    function runInitialIntro(){
+      const myToken = ++playToken;
+
+      document.body.style.overflow = 'hidden';
+      video.muted = true;
+
+      video.addEventListener('ended', () => { if(myToken === playToken) dismiss(false); });
+      video.addEventListener('error', () => { if(myToken === playToken) dismiss(false); });
+      video.play().catch(() => { if(myToken === playToken) dismiss(false); });
+
+      // Absolute fallback in case metadata/ended never fire (e.g. very long/short clip issues)
+      video.addEventListener('loadedmetadata', () => {
+        if(myToken !== playToken || !isFinite(video.duration)) return;
+        setTimeout(() => { if(myToken === playToken) dismiss(false); }, (video.duration * 1000) + 300);
+      });
+      setTimeout(() => { if(myToken === playToken) dismiss(false); }, 15000);
+
+      // Let a click/tap on the overlay skip the intro
+      overlay.addEventListener('click', () => { if(myToken === playToken) dismiss(false); });
+    }
+
     /* ---------------------------------------------------------
        PLAY LOGO WITH SOUND — replays the clip, unmuted, on demand.
        Wired up regardless of reduced-motion so it always works.
@@ -2298,22 +2766,60 @@ html.intro-revealed .play-logo-btn{
     if(playLogoSoundBtn){
       playLogoSoundBtn.addEventListener('click', (e) => {
         e.stopPropagation();
+        // Invalidate any earlier play/pause attempt still in flight (initial
+        // autoplay, or a previous quick Play Logo click) so its promise
+        // rejection or 'ended' event can't fade this replay back out.
+        const myToken = ++playToken;
 
         function endReplay(){
+          if(myToken !== playToken) return;
           overlay.classList.add('fade-out');
           document.body.style.overflow = '';
         }
 
         overlay.classList.remove('fade-out');
         document.body.style.overflow = 'hidden';
-        video.pause();
-        video.currentTime = 0;
-        video.muted = false;
-        video.volume = 1;
-        video.play().catch(endReplay);
 
-        video.addEventListener('ended', endReplay, { once:true });
-        overlay.addEventListener('click', endReplay, { once:true });
+        function startPlayback(){
+          if(myToken !== playToken) return;
+          video.muted = false;
+          video.volume = 1;
+          video.play().catch(() => { if(myToken === playToken) endReplay(); });
+          video.addEventListener('ended', endReplay, { once:true });
+          overlay.addEventListener('click', endReplay, { once:true });
+        }
+
+        function seekToStartThenPlay(){
+          if(myToken !== playToken) return;
+          video.pause();
+
+          if(video.currentTime === 0){
+            startPlayback();
+            return;
+          }
+
+          let seeked = false;
+          function onSeeked(){
+            if(seeked) return;
+            seeked = true;
+            video.removeEventListener('seeked', onSeeked);
+            startPlayback();
+          }
+          video.addEventListener('seeked', onSeeked);
+          video.currentTime = 0;
+          // Safety net: some browsers won't reliably fire 'seeked', so
+          // don't leave the user staring at a black overlay forever.
+          setTimeout(onSeeked, 250);
+        }
+
+        if(video.readyState === 0){
+          // Nothing has loaded yet (e.g. a reduced-motion visitor whose
+          // browser never ran the silent autoplay) — load before seeking.
+          video.addEventListener('loadedmetadata', seekToStartThenPlay, { once:true });
+          video.load();
+        } else {
+          seekToStartThenPlay();
+        }
       });
     }
 
@@ -2322,26 +2828,7 @@ html.intro-revealed .play-logo-btn{
       return;
     }
 
-    // Lock scroll while the intro plays
-    document.body.style.overflow = 'hidden';
-
-    video.muted = true;
-    video.addEventListener('ended', () => dismiss(false));
-
-    // If the browser blocks autoplay or the file fails to load, don't trap the user
-    video.addEventListener('error', () => dismiss(false));
-    video.play().catch(() => dismiss(false));
-
-    // Absolute fallback in case metadata/ended never fire (e.g. very long/short clip issues)
-    video.addEventListener('loadedmetadata', () => {
-      if(isFinite(video.duration)){
-        setTimeout(() => dismiss(false), (video.duration * 1000) + 300);
-      }
-    });
-    setTimeout(() => dismiss(false), 15000);
-
-    // Let a click/tap on the overlay skip the intro
-    overlay.addEventListener('click', () => dismiss(false));
+    runInitialIntro();
   })();
 
 </script>
