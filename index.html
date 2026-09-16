@@ -560,17 +560,31 @@ img{ max-width:100%; display:block; }
   font-size:13px;
   letter-spacing:0.06em;
   text-transform:uppercase;
-  color:#211B14;
-  background:var(--accent);
-  border:1px solid var(--accent);
+  color:var(--text-mute);
+  background:transparent;
+  border:1px dashed rgba(255,255,255,0.16);
   padding:14px 32px;
   border-radius:var(--radius);
   cursor:pointer;
-  transition:background 0.2s ease, color 0.2s ease;
+  transition:color 0.2s ease, border-color 0.2s ease;
 }
 .more-projects-btn:hover{
-  background:transparent;
   color:var(--accent);
+  border-color:var(--accent);
+}
+
+/* Inline mobile-only variants, placed directly in the project grid flow
+   so they can sit under a specific tile. Hidden by default; only shown
+   (and the desktop pair hidden) at the narrow single-column breakpoint. */
+.more-projects-btn-inline{
+  display:none;
+  grid-column:1 / -1;
+  width:100%;
+  text-align:center;
+}
+@media (max-width:520px){
+  .more-projects-btn-inline{ display:block; }
+  .more-projects-wrap{ display:none; }
 }
 
 /* ============================================================
@@ -1664,6 +1678,8 @@ html.intro-revealed .play-logo-btn{
         </div>
       </div>
 
+      <button type="button" class="more-projects-btn more-projects-btn-inline" id="moreProjectsBtnGraphicMobile">More Graphic Design</button>
+
       <div class="tile"
            data-role="3D Environment Artist"
            data-date="January - June 2026"
@@ -1725,6 +1741,8 @@ html.intro-revealed .play-logo-btn{
           </div>
         </div>
       </div>
+
+      <button type="button" class="more-projects-btn more-projects-btn-inline" id="moreProjectsBtn3DMobile">More 3D Design</button>
 
       <div class="tile hidden-extra"
            data-role="3D Environment Artist"
@@ -2607,8 +2625,13 @@ html.intro-revealed .play-logo-btn{
     if(moreProjectsLastFocused) moreProjectsLastFocused.focus();
   }
 
+  const moreProjectsBtn3DMobile      = document.getElementById('moreProjectsBtn3DMobile');
+  const moreProjectsBtnGraphicMobile = document.getElementById('moreProjectsBtnGraphicMobile');
+
   if(moreProjectsBtn3D) moreProjectsBtn3D.addEventListener('click', () => openMoreProjectsModal('3d'));
   if(moreProjectsBtnGraphic) moreProjectsBtnGraphic.addEventListener('click', () => openMoreProjectsModal('graphic'));
+  if(moreProjectsBtn3DMobile) moreProjectsBtn3DMobile.addEventListener('click', () => openMoreProjectsModal('3d'));
+  if(moreProjectsBtnGraphicMobile) moreProjectsBtnGraphicMobile.addEventListener('click', () => openMoreProjectsModal('graphic'));
   moreProjectsCloseBtn.addEventListener('click', closeMoreProjectsModal);
   moreProjectsOverlay.addEventListener('click', (e) => {
     if(e.target === moreProjectsOverlay) closeMoreProjectsModal();
