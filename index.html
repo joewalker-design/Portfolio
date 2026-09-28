@@ -444,6 +444,12 @@ body.section-open .compass{ opacity:0; pointer-events:none; transition: opacity 
 }
 .home-btn svg{ width: 100%; height: auto; display: block; }
 
+/* 3D Design reel on desktop: no page numbers, and the YouTube link sits on the video instead of in the panel */
+@media (min-width: 621px){
+  #sec-3d .reel-index{ display:none; }
+  #details-3d .dp-links{ display:none; }
+}
+
 /* menu-only controls (logo + close): shown inside the mobile menu, hidden elsewhere */
 .nav-close, .nav-menu-logo{ display: none; }
 
@@ -638,12 +644,6 @@ body.section-open .compass{ opacity:0; pointer-events:none; transition: opacity 
   transform: translate(-50%,-50%);
   border:0; pointer-events:none;
 }
-.film-veil{
-  position:absolute; inset:0; pointer-events:none;
-  background:
-    linear-gradient(to right, rgba(var(--ink-rgb),.6), rgba(var(--ink-rgb),0) 36%, rgba(var(--ink-rgb),0) 64%, rgba(var(--ink-rgb),.6)),
-    linear-gradient(to bottom, rgba(var(--ink-rgb),.5), rgba(var(--ink-rgb),0) 28%, rgba(var(--ink-rgb),0) 70%, rgba(var(--ink-rgb),.64));
-}
 .film-caption{
   position:absolute; bottom: calc(var(--safe-b) + 40px); left:50%;
   transform: translateX(-50%);
@@ -652,6 +652,20 @@ body.section-open .compass{ opacity:0; pointer-events:none; transition: opacity 
 }
 .film-caption h2{ font-size: clamp(1.7rem, 4vw, 2.9rem); line-height:1; }
 .film-caption p{ margin:.5rem 0 0; font-size:.94rem; opacity:.74; }
+
+/* "Watch on YouTube" button, where the caption used to sit (desktop) */
+.yt-cta{
+  position:absolute; bottom: calc(var(--safe-b) + 40px); left:50%;
+  transform: translateX(-50%);
+  z-index:20;
+  transition: transform 520ms var(--ease-io), opacity 360ms var(--ease-io);
+}
+/* same glass look as the Details tab */
+.yt-cta .glass{
+  font-size: clamp(.9rem, 1.25vw, 1.05rem);
+  letter-spacing:.16em; padding:.68em 2em; white-space:nowrap;
+}
+#sec-3d.details-open .yt-cta{ transform: translateX(calc(-50% + min(25vw, 320px))); }
 
 .reel-index{
   position:absolute; top: calc(var(--safe-t) + 26px); left:50%;
@@ -724,6 +738,7 @@ body.section-open .compass{ opacity:0; pointer-events:none; transition: opacity 
 .details-panel h3{ font-size:1.05rem; margin:2.2rem 0 .7rem; }
 
 /* software chips with icons */
+.dp-links:not(:empty){ margin:.4rem 0 1.8rem; }
 .soft-list{ display:flex; flex-wrap:wrap; gap:.5rem; }
 .soft-list span{
   display:inline-flex; align-items:center; gap:.45em;
@@ -780,7 +795,6 @@ body.section-open .compass{ opacity:0; pointer-events:none; transition: opacity 
   padding: calc(var(--safe-t) + 92px) clamp(24px, 3.2vw, 52px) calc(var(--safe-b) + 40px);
 }
 
-#sec-3d.details-open .film-caption    { transform: translateX(calc(-50% + min(25vw, 320px))); }
 
 /* ==========================================================================
    Connect
@@ -1071,12 +1085,12 @@ body.section-open .compass{ opacity:0; pointer-events:none; transition: opacity 
   .film-poster{ width:36px; height:52px; }
   .clip-stage{ padding-top: calc(var(--safe-t) + 150px); }
   .clip-play{ width:76px; height:76px; }
+  #sec-3d.details-open .yt-cta{ opacity:0; pointer-events:none; }
   .details-panel{ width:100%; }
   #details-3d .dp-figs{ grid-template-columns:1fr; }
   .details-tab.left { margin-left: 2rem; }
   .details-tab.right{ margin-right: 2rem; }
   .gd-logo{ width:min(204px, 48vw); max-height:29vh; }
-  .section.details-open .film-caption{ opacity:0; }
   .section.details-open .details-tab{ opacity:0; pointer-events:none; }
   .section.details-open .secnav{ opacity:0; pointer-events:none; }
 }
@@ -1153,8 +1167,12 @@ body.section-open .compass{ opacity:0; pointer-events:none; transition: opacity 
     border-radius:16px;
   }
   .nav-links .nav-close svg{ width:16px; height:16px; }
-  .film-caption h2{ font-size:1.45rem; }
-  .clip-play{ width:72px; height:72px; }
+
+  /* ---- Mobile reels: video fits the screen width, no captions or play control ---- */
+  .reel-item{ background:var(--ink); }
+  .film-frame{ width:100vw; height:56.25vw; min-width:0; min-height:0; }
+  .film-caption, .yt-cta{ display:none; }   /* mobile: the link lives in the details panel */
+  .clip-play{ display:none; }
 
   /* ---- Mobile landing: stacked navigation with Connect below Motion (desktop unchanged) ---- */
   #landing{
@@ -1727,12 +1745,8 @@ html.intro-active .compass *{
       data-body="My final year university project, and the piece that won best final year project. Every building was modelled in Maya, textured in Substance Painter and assembled in Unreal Engine 5, with Lumen lighting, Niagara particle systems and decal work carrying the atmosphere.||I made most of the props myself and used the graphic design side of my practice for all the signage, which is what makes the street read as a real place rather than a kit of parts. The technical focus was optimisation: keeping polycounts honest, and building a modular air duct system driven by trimsheets so the same texture budget covers the whole scene.||Materials were the other half of the work — wet concrete, subsurface scattering on the fabric and paper elements, and emissive textures doing the signage glow rather than dozens of lights."
       data-video="bQT2pvOHHSw">
       <iframe class="film-frame" title="Last Call" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
-      <div class="film-veil"></div>
+      <div class="yt-cta"><a class="glass" href="https://www.youtube.com/watch?v=bQT2pvOHHSw" target="_blank" rel="noopener noreferrer">Watch on YouTube</a></div>
       <div class="reel-index">01 / 05</div>
-      <div class="film-caption">
-        <h2>Last Call</h2>
-        <p>Shinjuku izakaya environment, built in Unreal Engine 5</p>
-      </div>
     </article>
 
     <article class="reel-item"
@@ -1744,12 +1758,8 @@ html.intro-active .compass *{
       data-body="The task was to model an object and set it convincingly inside recorded footage, which meant the modelling, the texturing and the lighting all had to agree with a plate I had no control over.||It pushed my hard-surface modelling and PBR texturing further than anything before it, and I rebuilt the AOV passes in Nuke rather than taking the beauty render straight out of Maya — that gave me control over every component of the final look at comp stage."
       data-video="hkCwsdobghs">
       <iframe class="film-frame" title="Nintendo DS Scene" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
-      <div class="film-veil"></div>
+      <div class="yt-cta"><a class="glass" href="https://www.youtube.com/watch?v=hkCwsdobghs" target="_blank" rel="noopener noreferrer">Watch on YouTube</a></div>
       <div class="reel-index">02 / 05</div>
-      <div class="film-caption">
-        <h2>Nintendo DS Scene</h2>
-        <p>Hard-surface model composited into live footage</p>
-      </div>
     </article>
 
     <article class="reel-item"
@@ -1761,12 +1771,8 @@ html.intro-active .compass *{
       data-body="A group project of three. The brief was a VFX scene combining a 3D model with a simulation, so the work split naturally between asset, effect and comp.||I was responsible for the microscope model, matching its lighting to the shot, and the compositing in NukeX. Getting the glass and chrome to sit in the plate took more comp work than model work in the end."
       data-video="hWeztThzYak">
       <iframe class="film-frame" title="Science Lab" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
-      <div class="film-veil"></div>
+      <div class="yt-cta"><a class="glass" href="https://www.youtube.com/watch?v=hWeztThzYak" target="_blank" rel="noopener noreferrer">Watch on YouTube</a></div>
       <div class="reel-index">03 / 05</div>
-      <div class="film-caption">
-        <h2>Science Lab</h2>
-        <p>Lab props and simulation, composited in NukeX</p>
-      </div>
     </article>
 
     <article class="reel-item"
@@ -1778,12 +1784,8 @@ html.intro-active .compass *{
       data-body="A group project building a themed bedroom environment, with each of us responsible for one hero model. Mine was the sniper rifle.||Beyond the model I handled the workbench asset placement and the lighting for the whole scene, which is where an apocalyptic theme lives or dies — the props only read as scavenged if the light treats them that way."
       data-video="f0BBMHPY_Yg">
       <iframe class="film-frame" title="Survivors Hideout" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
-      <div class="film-veil"></div>
+      <div class="yt-cta"><a class="glass" href="https://www.youtube.com/watch?v=f0BBMHPY_Yg" target="_blank" rel="noopener noreferrer">Watch on YouTube</a></div>
       <div class="reel-index">04 / 05</div>
-      <div class="film-caption">
-        <h2>Survivors Hideout</h2>
-        <p>Apocalyptic interior, lit and dressed in Unreal Engine 5</p>
-      </div>
     </article>
 
     <article class="reel-item"
@@ -1794,12 +1796,8 @@ html.intro-active .compass *{
       data-body="Two strands of work in one reel. In Maya I animated an action shot — a spinning back kick — and an acting performance using a scene from The Dark Knight as reference, which pushed timing and weight far harder than the action piece did.||In Houdini I built two simulations: a rigid body break of a mug hitting a surface, and a fluid sim of an ice cream machine dispensing. The fluid setup was the harder problem, mostly in getting the viscosity to read as soft-serve rather than paint."
       data-video="NAYxOOh3LxQ">
       <iframe class="film-frame" title="Animations and Simulations" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
-      <div class="film-veil"></div>
+      <div class="yt-cta"><a class="glass" href="https://www.youtube.com/watch?v=NAYxOOh3LxQ" target="_blank" rel="noopener noreferrer">Watch on YouTube</a></div>
       <div class="reel-index">05 / 05</div>
-      <div class="film-caption">
-        <h2>Animations and Simulations</h2>
-        <p>Keyframe animation and Houdini simulation work</p>
-      </div>
     </article>
 
   </div>
@@ -1816,6 +1814,7 @@ html.intro-active .compass *{
         <div><dt>Software used</dt><dd><div class="soft-list" data-slot="software"></div></dd></div>
       </dl>
       <div data-slot="body"></div>
+      <div class="dp-links" data-slot="video"></div>
       <div data-slot="gallery"></div>
       <div data-slot="legacy"></div>
       <div data-slot="props"></div>
@@ -2137,6 +2136,7 @@ html.intro-active .compass *{
 
     if(key === 'graphic'){ layoutGraphic(); gdScroll.scrollTop = 0; onGraphicScroll(); }
     if(reels[key]) reels[key].activate();
+    if(key === 'motion' && isMobileNav()) autoplayLogoClip();
 
     var first = sec.querySelector('.secnav .glass');
     if(first) first.focus({ preventScroll:true });
@@ -2347,6 +2347,21 @@ html.intro-active .compass *{
       body.appendChild(p);
     });
 
+    var videoWrap = panel.querySelector('[data-slot="video"]');
+    if(videoWrap){
+      videoWrap.innerHTML = '';
+      var vid = item.getAttribute('data-video');
+      if(vid){
+        var yt = document.createElement('a');
+        yt.className = 'gd-link';
+        yt.href = 'https://www.youtube.com/watch?v=' + encodeURIComponent(vid);
+        yt.target = '_blank';
+        yt.rel = 'noopener noreferrer';
+        yt.textContent = 'Watch on YouTube';
+        videoWrap.appendChild(yt);
+      }
+    }
+
     buildFigGroup(panel.querySelector('[data-slot="gallery"]'), splitList(item.getAttribute('data-gallery')), null);
     buildWireGroup(
       panel.querySelector('[data-slot="legacy"]'),
@@ -2531,7 +2546,27 @@ html.intro-active .compass *{
     });
     logoClip.addEventListener('ended', function(){ markPlaying(false); });
     logoClip.addEventListener('pause', function(){ markPlaying(false); });
-    logoClip.addEventListener('click', function(){ if(!logoClip.paused) logoClip.pause(); });
+    logoClip.addEventListener('click', function(){
+      if(isMobileNav()) return;               /* mobile has no play controls */
+      if(!logoClip.paused) logoClip.pause();
+    });
+  }
+
+  /* Mobile: no play button — the clip just runs (muted, looping) while the section is open. */
+  function autoplayLogoClip(){
+    if(!logoClip) return;
+    logoClip.muted = true;
+    logoClip.loop  = true;
+    var start = function(){
+      try { logoClip.currentTime = 0; } catch(e){}
+      var play = logoClip.play();
+      if(play && play.catch) play.catch(function(){});
+    };
+    if(logoClip.readyState >= 3){ start(); }
+    else {
+      logoClip.addEventListener('canplay', start, { once:true });
+      logoClip.load();
+    }
   }
 
   /* ----------------------------------------------------------------------
