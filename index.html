@@ -5,10 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>JOWA</title>
 <meta name="description" content="Joe Walker — Graphic Designer, 3D Artist and Motion Designer.">
-  <!-- TMDB: paste either your API Read Access Token or v3 API key here to load posters from the TMDB API. -->
-  <meta name="tmdb-access-token" content="">
-  <meta name="tmdb-api-key" content="">
-
 <link rel="icon" type="image/png" sizes="" href="./img/favicon_io/favicon.ico">
 <link rel="manifest" href="/site.webmanifest">
 
@@ -1022,26 +1018,10 @@ body.section-open .compass{ opacity:0; pointer-events:none; transition: opacity 
   font-family: var(--font-head); font-weight:600; font-size:.95rem;
   opacity:.45; width:1.4em; flex-shrink:0; text-align:right;
 }
-.film-poster{
-  width:42px; height:60px; object-fit:cover; border-radius:5px; flex-shrink:0;
-  background: rgba(var(--paper-rgb),.06);
-}
-.film-poster.img-missing{
-  min-height:0; padding:.3rem; font-size:.55rem; line-height:1.2;
-}
 .films-list span{ font-size:.98rem; font-weight:600; line-height:1.35; }
 .films-list em{ font-style:normal; font-weight:500; opacity:.6; font-size:.86rem; }
 
 .contact-stack h3{ margin-top:0; }
-.tmdb-credit{
-  margin:1.25rem 0 0;
-  text-align:center;
-  font-size:.72rem;
-  line-height:1.5;
-  opacity:.5;
-}
-.tmdb-credit a{ text-decoration:none; border-bottom:1px solid currentColor; }
-
 .contact-stack{
   margin-top:1.45rem;
 }
@@ -1091,7 +1071,6 @@ body.section-open .compass{ opacity:0; pointer-events:none; transition: opacity 
   .gd-figs.gd-2x2{ grid-template-columns:1fr; }
   .connect-right{ margin-top: 0; }
   .offer-grid{ grid-template-columns: 1fr; gap: 2rem; }
-  .film-poster{ width:36px; height:52px; }
   .clip-stage{ padding-top: calc(var(--safe-t) + 150px); }
   .clip-play{ width:76px; height:76px; }
   #sec-3d.details-open .yt-cta{ opacity:0; pointer-events:none; }
@@ -1991,16 +1970,16 @@ html.intro-active .compass *{
       <button type="button" class="glass films-close" data-close-films aria-label="Close">✕</button>
       <h2>My top 10 films</h2>
       <ol class="films-list">
-        <li><img class="film-poster" src="./img/films/lord-of-the-rings.jpg" alt="" data-tmdb-query="The Lord of the Rings: The Fellowship of the Ring" data-tmdb-year="2001" loading="lazy"><span>Lord of the Rings <em>(the trilogy counts as one)</em></span></li>
-        <li><img class="film-poster" src="./img/films/pulp-fiction.jpg" alt="" data-tmdb-query="Pulp Fiction" data-tmdb-year="1994" loading="lazy"><span>Pulp Fiction</span></li>
-        <li><img class="film-poster" src="./img/films/oldboy.jpg" alt="" data-tmdb-query="Oldboy" data-tmdb-year="2003" loading="lazy"><span>Old Boy</span></li>
-        <li><img class="film-poster" src="./img/films/inglourious-basterds.jpg" alt="" data-tmdb-query="Inglourious Basterds" data-tmdb-year="2009" loading="lazy"><span>Inglourious Basterds</span></li>
-        <li><img class="film-poster" src="./img/films/snatch.jpg" alt="" data-tmdb-query="Snatch" data-tmdb-year="2000" loading="lazy"><span>Snatch</span></li>
-        <li><img class="film-poster" src="./img/films/alien.jpg" alt="" data-tmdb-query="Alien" data-tmdb-year="1979" loading="lazy"><span>Alien</span></li>
-        <li><img class="film-poster" src="./img/films/parasite.jpg" alt="" data-tmdb-query="Parasite" data-tmdb-year="2019" loading="lazy"><span>Parasite</span></li>
-        <li><img class="film-poster" src="./img/films/heat.jpg" alt="" data-tmdb-query="Heat" data-tmdb-year="1995" loading="lazy"><span>Heat</span></li>
-        <li><img class="film-poster" src="./img/films/goodfellas.jpg" alt="" data-tmdb-query="Goodfellas" data-tmdb-year="1990" loading="lazy"><span>Goodfellas</span></li>
-        <li><img class="film-poster" src="./img/films/blade-runner.jpg" alt="" data-tmdb-query="Blade Runner" data-tmdb-year="1982" loading="lazy"><span>Blade Runner</span></li>
+        <li><span>Lord of the Rings <em>(the trilogy counts as one)</em></span></li>
+        <li><span>Pulp Fiction</span></li>
+        <li><span>Old Boy</span></li>
+        <li><span>Inglourious Basterds</span></li>
+        <li><span>Snatch</span></li>
+        <li><span>Alien</span></li>
+        <li><span>Parasite</span></li>
+        <li><span>Heat</span></li>
+        <li><span>Goodfellas</span></li>
+        <li><span>Blade Runner</span></li>
       </ol>
     </div>
   </div>
@@ -2471,66 +2450,6 @@ html.intro-active .compass *{
   document.addEventListener('keydown', function(e){
     if(e.key === 'Escape' && designersModal && designersModal.classList.contains('open')) closeDesigners();
   });
-
-  /* --- TMDB: load the top-10 posters from the official movie API --- */
-  var tmdbTokenMeta = document.querySelector('meta[name="tmdb-access-token"]');
-  var tmdbKeyMeta   = document.querySelector('meta[name="tmdb-api-key"]');
-  var tmdbAccessToken = tmdbTokenMeta ? tmdbTokenMeta.content.trim() : '';
-  var tmdbApiKey      = tmdbKeyMeta ? tmdbKeyMeta.content.trim() : '';
-
-  function tmdbHeaders(){
-    var headers = { 'accept':'application/json' };
-    if(tmdbAccessToken) headers.Authorization = 'Bearer ' + tmdbAccessToken;
-    return headers;
-  }
-
-  async function tmdbJson(path){
-    if(!tmdbAccessToken && !tmdbApiKey) return null;
-    try{
-      var url = 'https://api.themoviedb.org/3' + path;
-      if(!tmdbAccessToken && tmdbApiKey) url += (url.indexOf('?') >= 0 ? '&' : '?') + 'api_key=' + encodeURIComponent(tmdbApiKey);
-      var res = await fetch(url, {
-        headers: tmdbHeaders(),
-        mode: 'cors'
-      });
-      if(!res.ok) throw new Error('TMDB ' + res.status);
-      return await res.json();
-    }catch(err){
-      return null;
-    }
-  }
-
-  async function loadTMDBPosters(){
-    if(!tmdbAccessToken && !tmdbApiKey) return;
-
-    var config = await tmdbJson('/configuration');
-    var base = config && config.images && config.images.secure_base_url
-      ? config.images.secure_base_url
-      : 'https://image.tmdb.org/t/p/';
-
-    var posters = [].slice.call(document.querySelectorAll('.film-poster[data-tmdb-query]'));
-
-    await Promise.all(posters.map(async function(img){
-      var query = img.getAttribute('data-tmdb-query');
-      var year = img.getAttribute('data-tmdb-year');
-      var data = await tmdbJson('/search/movie?query=' + encodeURIComponent(query) +
-        '&language=en-US&include_adult=false&page=1');
-
-      if(!data || !Array.isArray(data.results)) return;
-
-      var match = data.results.find(function(movie){
-        return movie.poster_path && (!year || String(movie.release_date || '').slice(0,4) === year);
-      }) || data.results.find(function(movie){ return movie.poster_path; });
-
-      if(!match || !match.poster_path) return;
-
-      img.src = base + 'w500' + match.poster_path;
-      img.alt = (match.title || query) + ' poster';
-      img.dataset.source = 'tmdb';
-    }));
-  }
-
-  loadTMDBPosters();
 
   /* --- Motion: local clip playback --- */
   var logoClip = document.getElementById('logoClip');
