@@ -667,6 +667,15 @@ body.section-open .compass{ opacity:0; pointer-events:none; transition: opacity 
 }
 #sec-3d.details-open .yt-cta{ transform: translateX(calc(-50% + min(25vw, 320px))); }
 
+/* 3D Design modal only: white controls and the white logo over the video.
+   (The logo body follows the button's text colour; the colour pieces stay.) */
+#sec-3d .secnav .home-btn,
+#sec-3d .details-tab,
+#sec-3d .yt-cta .glass{ color:#fff; }
+@media (min-width: 621px){
+  #sec-3d .nav-links .glass{ color:#fff; }
+}
+
 .reel-index{
   position:absolute; top: calc(var(--safe-t) + 26px); left:50%;
   transform: translateX(-50%);
@@ -1170,6 +1179,8 @@ body.section-open .compass{ opacity:0; pointer-events:none; transition: opacity 
 
   /* ---- Mobile reels: video fits the screen width, no captions or play control ---- */
   .reel-item{ background:var(--ink); }
+  #sec-3d .reel-item{ background:#000; }   /* dark stage so the white controls stay visible */
+  #sec-3d .reel-index{ color:#fff; }
   .film-frame{ width:100vw; height:56.25vw; min-width:0; min-height:0; }
   .film-caption, .yt-cta{ display:none; }   /* mobile: the link lives in the details panel */
   .clip-play{ display:none; }
