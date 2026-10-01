@@ -1284,6 +1284,15 @@ body.section-open .compass{ opacity:0; pointer-events:none; transition: opacity 
   }
 
   /* ---- Mobile Connect adjustments ---- */
+  /* Free scrolling on mobile: no page-to-page snapping in Connect. */
+  .connect-scroll{
+    scroll-snap-type:none;
+  }
+  .connect-page{
+    scroll-snap-align:none;
+    scroll-snap-stop:normal;
+  }
+
   /* Keep "My top 10 films" / "My top 5 Designers" on one line, and add
      breathing room right after the button row. */
   .connect-btn-row{
@@ -1652,7 +1661,13 @@ html.intro-active .compass *{
             </ul>
             <div class="gd-figs">
               <figure><img src="./img/Clients/mindset/LogoComparison.png" alt="MINDSET logo before and after"><figcaption>Existing mark against the redesign</figcaption></figure>
-              <figure><img src="./img/Clients/mindset/DesignsPage.png" alt="MINDSET applications and touchpoints"><figcaption>Applications and touchpoints</figcaption></figure>
+              <figure><img src="./img/Clients/mindset/Logoandelements.png" alt="MINDSET logo and elements"><figcaption>Logo and supporting elements</figcaption></figure>
+              <figure><img src="./img/Clients/mindset/BusinessCard.png" alt="MINDSET logo and elements"><figcaption>Logo and supporting elements</figcaption></figure>
+              <figure><img src="./img/Clients/mindset/BusinessCards.jpg" alt="Business cards"><figcaption>Business cards</figcaption></figure>
+              <figure><img src="./img/Clients/mindset/WristBandandCap.jpg" alt="Wrist bands and caps"><figcaption>Wrist bands & caps</figcaption></figure>
+              <figure><img src="./img/Clients/mindset/Tshirt.jpg" alt="T-shirt"><figcaption>T-shirt - light & dark</figcaption></figure>
+              <figure><img src="./img/Clients/mindset/SocialMedia Posts.jpg" alt="Social media posts"><figcaption>Social media posts</figcaption></figure>
+
             </div>
             <div class="gd-proposal">
               <p>Please see the full brand proposal here</p>
