@@ -242,6 +242,28 @@ a{ color: inherit; }
 /* multi-line project headings break only on mobile */
 @media (min-width: 821px){ .m-br{ display: none; } }
 
+/* mute button (desktop, projects section) */
+.mute-btn{
+  position: fixed; z-index: 60; left: 50%; bottom: calc(var(--u) * 26);
+  transform: translate(-50%, 8px);
+  display: none; align-items: center; gap: .7em;
+  padding: .75em 1.2em;
+  background: var(--ink); color: var(--paper);
+  border: 1.5px solid var(--paper);
+  font-family: var(--font-mono); font-size: max(11px, calc(var(--u) * 15)); letter-spacing: .14em; line-height: 1;
+  text-transform: uppercase; white-space: nowrap;
+  opacity: 0; visibility: hidden;
+  transition: opacity 260ms var(--ease-out), transform 260ms var(--ease-out), background 200ms, color 200ms, visibility 0s linear 260ms;
+}
+.mute-btn svg{ width: 1.7em; height: 1.7em; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.mute-btn .mute-off, .mute-btn[aria-pressed="true"] .mute-on{ display: none; }
+.mute-btn[aria-pressed="true"] .mute-off{ display: inline; }
+.mute-btn:hover{ background: var(--paper); color: var(--ink); }
+@media (min-width: 821px){
+  .mute-btn{ display: flex; }
+  html.in-projects .mute-btn{ opacity: 1; visibility: visible; transform: translate(-50%, 0); transition-delay: 0s; }
+}
+
 /* logo */
 .box-logo{ padding: 0; display: grid; place-items: center; }
 .box-logo svg{ width: calc(var(--u) * 283); height: auto; display: block; color: var(--paper); }
@@ -849,6 +871,16 @@ html.intro-active .pop{ animation-play-state: paused !important; }
 </script>
 
 <div class="tip" id="tip" role="tooltip"></div>
+
+<!-- Mute button: desktop only, shown while the projects section is on screen -->
+<button type="button" class="mute-btn" id="muteBtn" aria-pressed="false" aria-label="Mute music">
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M4 9h4l5-4v14l-5-4H4z"/>
+    <g class="mute-on"><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></g>
+    <g class="mute-off"><path d="M17 9.5l5 5M22 9.5l-5 5"/></g>
+  </svg>
+  <span class="mute-label">Sound on</span>
+</button>
 
 <!-- YouTube player that drives the custom music player (kept off-screen) -->
 <div id="ytHost" aria-hidden="true" style="position:fixed;left:-9999px;top:0;width:200px;height:200px;pointer-events:none;overflow:hidden"><div id="ytPlayer"></div></div>
@@ -1773,7 +1805,7 @@ html.intro-active .pop{ animation-play-state: paused !important; }
   var ti = 0, useYT = false, yt = null, ytReady = false, ytPlaying = false, ytTimer = null, ytQueue = null;
   var mpTitle = $('#mpTitle'), mpArt = $('#mpArt'), mpBar = $('#mpBar'), mpThumb = $('#mpThumb'),
       mpCur = $('#mpCur'), mpDur = $('#mpDur'), mpPlay = $('#mpPlay');
-  var seeking = false;
+  var seeking = false, muted = false;
   function fmt(s){
     if(!isFinite(s) || s < 0) s = 0;
     var m = Math.floor(s / 60), r = Math.floor(s % 60);
@@ -1836,6 +1868,7 @@ html.intro-active .pop{ animation-play-state: paused !important; }
   }
   function ytOnReady(){
     ytReady = true;
+    if(muted) yt.mute();
     if(useYT && ytQueue && ytQueue.autoplay) yt.playVideo();
     ytQueue = null;
     tick();
@@ -1900,6 +1933,25 @@ html.intro-active .pop{ animation-play-state: paused !important; }
     if(e.key === 'ArrowRight') doSeek(Math.min(d, getT() + 5));
     if(e.key === 'ArrowLeft')  doSeek(Math.max(0, getT() - 5));
   });
+
+
+  /* ======================================================================
+     Mute button (desktop): shown while the projects section is on screen
+     ====================================================================== */
+  var muteBtn = $('#muteBtn');
+  function applyMute(){
+    audio.muted = muted;
+    if(ytReady){ if(muted) yt.mute(); else yt.unMute(); }
+    muteBtn.setAttribute('aria-pressed', muted ? 'true' : 'false');
+    muteBtn.setAttribute('aria-label', muted ? 'Unmute music' : 'Mute music');
+    $('.mute-label', muteBtn).textContent = muted ? 'Muted' : 'Sound on';
+  }
+  muteBtn.addEventListener('click', function(){ muted = !muted; applyMute(); });
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(en){
+      document.documentElement.classList.toggle('in-projects', en[0].isIntersecting);
+    }, { threshold: .5 }).observe($('#split'));
+  }
 
   /* ======================================================================
      Layout upkeep + deep links
